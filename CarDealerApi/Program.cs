@@ -1,5 +1,6 @@
 using System.Text;
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Tokens.Experimental;
@@ -27,6 +28,10 @@ builder.Services.AddSingleton<DbConnectionFactory>();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseFastEndpoints();
+app.UseSwaggerGen();
 
 app.Run();
