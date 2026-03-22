@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddSwaggerDocument();
+builder.Services.AddEndpointsApiExplorer();
+
 // JWT
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", Options =>
@@ -24,6 +26,8 @@ builder.Services.AddAuthentication("Bearer")
         )
     };
 });
+builder.Services.AddAuthorization();
+
 builder.Services.AddSingleton<DbConnectionFactory>();
 
 var app = builder.Build();
@@ -31,6 +35,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseOpenApi();
 app.UseFastEndpoints();
 app.UseSwaggerGen();
 
