@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddSwaggerDocument();
-
 // JWT
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", Options =>
@@ -24,6 +23,7 @@ builder.Services.AddAuthentication("Bearer")
         )
     };
 });
+builder.Services.AddSingleton<DbConnectionFactory>();
 
 var app = builder.Build();
 
