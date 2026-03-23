@@ -29,6 +29,7 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<DbConnectionFactory>();
+builder.Services.AddSingleton<Data.DbInitializer>(); // init and seed DB
 
 var app = builder.Build();
 
@@ -38,5 +39,12 @@ app.UseAuthorization();
 app.UseOpenApi();
 app.UseFastEndpoints();
 app.UseSwaggerGen();
+
+// running DB initializer to create tables and seed data
+using  (var scope = app.Services.CreateScope())
+{
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<Data.DbInitializer>();
+    await dbInitializer.InitializeAsync();
+}
 
 app.Run();
