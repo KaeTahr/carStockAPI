@@ -24,9 +24,5 @@ namespace Models
         [Required]
         [JsonPropertyName("year")]
         public int Year { get; set; }
-
-        [Required]
-        [JsonPropertyName("stock")]
-        public int Stock { get; set; }  
     }
 }

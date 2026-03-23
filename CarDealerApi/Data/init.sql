@@ -1,3 +1,9 @@
+-- For testing only
+-- Delete database before creating new one
+DROP TABLE IF EXISTS Cars;
+DROP TABLE IF EXISTS Dealers;
+
+
 -- Tables
 CREATE TABLE IF NOT EXISTS Dealers (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,6 +18,7 @@ CREATE TABLE IF NOT EXISTS Cars (
     Year INTEGER,
     Price REAL,
     DealerId INTEGER,
+    Stock INTEGER,
     FOREIGN KEY (DealerId) REFERENCES Dealers(Id)
 );
 
