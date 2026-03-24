@@ -3,13 +3,12 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Tokens.Experimental;
+using Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddFastEndpoints();
-builder.Services.AddSwaggerDocument();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.SwaggerDocument(o => o.ExcludeNonFastEndpoints = true);
 
 // JWT
 builder.Services.AddAuthentication("Bearer")
@@ -35,8 +34,6 @@ var app = builder.Build();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseOpenApi();
 app.UseFastEndpoints();
 app.UseSwaggerGen();
 

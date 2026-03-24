@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS Dealers;
 CREATE TABLE IF NOT EXISTS Dealers (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
     Name TEXT NOT NULL,
+    Username Text NOT NULL UNIQUE,
+    PasswordHash Text NOT NULL,
     Location TEXT
 );
 
@@ -23,10 +25,10 @@ CREATE TABLE IF NOT EXISTS Cars (
 );
 
 -- Seed data
-INSERT INTO Dealers (Name, Location)
-SELECT 'Default Dealer', 'Melbourne'
+INSERT INTO Dealers (Name, Location, Username, PasswordHash)
+SELECT 'Default Dealer', 'Melbourne', 'defaultdealer', '123'
 WHERE NOT EXISTS (SELECT 1 FROM Dealers);
 
-INSERT INTO Cars (Make, Model, Year, Price, DealerId)
-SELECT 'Toyota', 'Corolla', 2020, 20000, 1
+INSERT INTO Cars (Make, Model, Year, Price, DealerId, Stock)
+SELECT 'Toyota', 'Corolla', 2020, 20000, 1, 10
 WHERE NOT EXISTS (SELECT 1 FROM Cars);

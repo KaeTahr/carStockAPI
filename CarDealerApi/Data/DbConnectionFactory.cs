@@ -1,6 +1,8 @@
 using Microsoft.Data.Sqlite;
 using System.Data;
 
+namespace Data;
+
 public class DbConnectionFactory
 {
     private readonly string _connectionString;
