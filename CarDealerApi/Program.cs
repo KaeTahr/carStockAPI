@@ -21,10 +21,11 @@ builder.Services.AddAuthentication("Bearer")
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes("super secret key")
-        )
-    };
-});
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            )
+        };
+    });
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<DbConnectionFactory>();
