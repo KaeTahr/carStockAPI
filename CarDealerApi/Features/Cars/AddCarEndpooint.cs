@@ -1,6 +1,8 @@
 using Dapper;
 using FastEndpoints;
 using Data;
+using Extensions;
+
 
 namespace Features.Cars;
 
@@ -16,19 +18,20 @@ public class AddCarEndpoint : Endpoint<AddCarRequest, CarResponse>
     public override void Configure()
     {
         Post("/cars");
-        AllowAnonymous(); // TODO: add JWT
+        Claims("dealerId");
         Description(x => x.WithName("AddCar"));
     }
 
     public override async Task HandleAsync(AddCarRequest req, CancellationToken ct)
     {
         using var connection = _factory.CreateConnection();
+        var dealerId = HttpContext.GetDealerId();
 
         var sql = @"INSERT INTO Cars (Make, Model, Year, Price, Stock, DealerId) 
-                    VALUES (@Make, @Model, @Year, @Price, @Stock, 1);
+                    VALUES (@Make, @Model, @Year, @Price, @Stock, @DealerId);
                     SELECT * FROM Cars WHERE Id = last_insert_rowid();";
 
-        var car = await connection.QuerySingleAsync<CarResponse>(sql, req);
+        var car = await connection.QuerySingleAsync<CarResponse>(sql, new { req.Make, req.Model, req.Year, req.Price, req.Stock, DealerId = dealerId });
         await Send.CreatedAtAsync<GetCarEndpoint>(
             routeValues: new { id = car.Id },
             responseBody: car,

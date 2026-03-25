@@ -1,6 +1,7 @@
 using Dapper;
 using FastEndpoints;
 using Data;
+using Extensions;
 
 namespace Features.Cars;
 
@@ -22,21 +23,24 @@ public class SearchCarsEndpoint : Endpoint<SearchCarsRequest, List<CarResponse>>
     public override void Configure()
     {
         Get("/cars/search");
-        AllowAnonymous(); // TODO: JWT
+        Claims("dealerId");
         Description(x => x.WithName("SearchCars"));
     }
 
     public override async Task HandleAsync(SearchCarsRequest req, CancellationToken ct)
     {
         using var connection = _factory.CreateConnection();
-        
+        var dealerId = HttpContext.GetDealerId();
+
         var sql = @"
             SELECT * FROM Cars
-            WHERE (@Make IS NULL OR Make LIKE @Make)
+            WHERE DealerId = @DealerId
+            AND (@Make IS NULL OR Make LIKE @Make)
             AND (@Model IS NULL OR Model LIKE @Model);";
 
         var cars = await connection.QueryAsync<CarResponse>(sql, new
         {
+            DealerId = dealerId,
             Make = req.Make == null ? null : $"%{req.Make}%",
             Model = req.Model == null ? null : $"%{req.Model}%"
         });

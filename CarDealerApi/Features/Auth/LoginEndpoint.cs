@@ -1,10 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using Dapper;
 using FastEndpoints;
 using Microsoft.IdentityModel.Tokens;
 using Data;
+using FastEndpoints.Security;
 
 namespace Features.Auth;
 
@@ -48,19 +47,15 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
             return;
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            claims: new[]
+        var token = JwtBearer.CreateToken(
+            o =>
             {
-                new Claim("dealerId", dealer.Id.ToString()),
-                new Claim(ClaimTypes.Name, dealer.Username)
-            },
-            expires: DateTime.UtcNow.AddHours(8),
-            signingCredentials: creds);
+                o.SigningKey = _config["Jwt:Key"]!;
+                o.ExpireAt = DateTime.UtcNow.AddHours(8);
+                o.User.Claims.Add(("dealerId", dealer.Id.ToString()));
+                o.User.Claims.Add(("username", dealer.Username));
+            });
 
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        await Send.OkAsync(new LoginResponse { Token = tokenString }, ct);
+        await Send.OkAsync(new LoginResponse { Token = token }, ct);
     }
 }

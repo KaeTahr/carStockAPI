@@ -1,6 +1,7 @@
 using Dapper;
 using FastEndpoints;
 using Data;
+using Extensions;
 
 namespace Features.Cars;
 
@@ -16,14 +17,16 @@ public class GetAllCarsEndpoint : EndpointWithoutRequest<List<CarResponse>>
     public override void Configure()
     {
         Get("/cars");
-        AllowAnonymous(); // TODO: add JWT
+        Claims("dealerId");
+        //Policy(x => x.RequireClaim("dealerId"));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
+        var dealerId = HttpContext.GetDealerId();
         using var connection = _factory.CreateConnection();
-        var sql = "SELECT * FROM Cars";
-        var cars = await connection.QueryAsync<CarResponse>(sql);
+        var sql = "SELECT * FROM Cars WHERE DealerId = @DealerId";
+        var cars = await connection.QueryAsync<CarResponse>(sql, new { DealerId = dealerId });
         await Send.OkAsync(cars.ToList(), ct);
     }
 }

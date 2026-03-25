@@ -1,6 +1,7 @@
 using Dapper;
 using FastEndpoints;
 using Data;
+using Extensions;
 
 namespace Features.Cars;
 
@@ -16,18 +17,19 @@ public class DeleteCarEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Delete("/cars/{id:int}");
-        AllowAnonymous(); // TODO: add JWT
+        Claims("dealerId");
         Description(x => x.WithName("DeleteCar"));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         var id = Route<int>("id");
+        var dealerId = HttpContext.GetDealerId();
         using var connection = _factory.CreateConnection();
 
-        var sql = "DELETE FROM Cars WHERE Id = @Id";
-        
-        var affectedRows = await connection.ExecuteAsync(sql, new { Id = id });
+        var sql = "DELETE FROM Cars WHERE Id = @Id AND DealerId = @DealerId";
+
+        var affectedRows = await connection.ExecuteAsync(sql, new { Id = id, DealerId = dealerId });
 
         if (affectedRows == 0)
         {

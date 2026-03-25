@@ -1,32 +1,24 @@
-using System.Text;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+using FastEndpoints.Security;
 using Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument(o => o.ExcludeNonFastEndpoints = true);
-
 // JWT
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", Options =>
-    {
-        Options.TokenValidationParameters = new ()
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
-            )
-        };
-    });
-
+builder.Services.AddAuthenticationJwtBearer(s =>
+{
+    s.SigningKey = builder.Configuration["Jwt:Key"]!;
+});
 builder.Services.AddAuthorization();
+
+builder.Services.AddFastEndpoints();
+builder.Services.SwaggerDocument(o =>
+{
+    o.ExcludeNonFastEndpoints = true;
+    o.DocumentSettings = s => s.EnableJWTBearerAuth();
+});
+
 
 builder.Services.AddSingleton<DbConnectionFactory>();
 builder.Services.AddSingleton<Data.DbInitializer>(); // init and seed DB
