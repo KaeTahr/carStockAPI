@@ -18,7 +18,6 @@ public class GetAllCarsEndpoint : EndpointWithoutRequest<List<CarResponse>>
     {
         Get("/cars");
         Claims("dealerId");
-        //Policy(x => x.RequireClaim("dealerId"));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
