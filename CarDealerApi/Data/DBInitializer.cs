@@ -1,7 +1,7 @@
 using System.Data.Common;
+using Dapper;
 
 namespace Data;
-using Dapper;
 
 public class DbInitializer
 {
