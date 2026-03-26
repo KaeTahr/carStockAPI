@@ -2,15 +2,14 @@
   import { register } from '../lib/api.js';
   import AuthLayout from '../components/AuthLayout.svelte';
 
-  export let onNavigate;
+  let { onNavigate } = $props();
   
-
-  let name = '';
-  let username = '';
-  let password = '';
-  let error = '';
-  let success = '';
-  let loading = false;
+  let name = $state('');
+  let username = $state('');
+  let password = $state('');
+  let error = $state('');
+  let success = $state('');
+  let loading = $state(false);
 
   async function handleRegister() {
     error = '';

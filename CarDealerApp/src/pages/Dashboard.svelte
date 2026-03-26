@@ -4,6 +4,8 @@
   import { getCars, addCar, deleteCar, updateStock, searchCars } from '../lib/api.js';
   import Modal from '../components/Modal.svelte';
 
+  let { onLogout } = $props();
+
   let cars = $state([]);
   let loading = $state(true);
   let error = $state('');
@@ -130,6 +132,11 @@
       stockLoading = false;
     }
   }
+
+  function handleLogout() {
+    logout();
+    onLogout();
+  }
 </script>
 
 <!-- Header -->
@@ -141,7 +148,7 @@
   <div class="flex items-center gap-4">
     <span class="text-sm text-muted">Hello, <span class="text-text font-medium">{$dealerName}</span>!</span>
     <button
-      onclick={logout}
+      onclick={handleLogout}
       class="text-muted hover:text-text text-sm transition-colors bg-transparent border-none cursor-pointer"
     >
       Sign out

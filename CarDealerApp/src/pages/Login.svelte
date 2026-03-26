@@ -3,13 +3,12 @@
   import { token, dealerName } from '../lib/stores.js';
   import AuthLayout from '../components/AuthLayout.svelte';
 
-  export let onNavigate;
-  export let successMessage = '';
+  let { onNavigate, successMessage = ''} = $props();
 
-  let username = '';
-  let password = '';
-  let error = '';
-  let loading = false;
+  let username = $state('');
+  let password = $state('');
+  let error = $state('');
+  let loading = $state(false);
 
   async function handleLogin() {
     error = '';

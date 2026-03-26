@@ -9,7 +9,7 @@
 </script>
 
 {#if $isAuthenticated}
-  <Dashboard />
+  <Dashboard onLogout={() => { successMessage = ''; currentPage = 'login'; }} />
 {:else if currentPage === 'register'}
   <Register onNavigate={(page, msg = '') => { currentPage = page; successMessage = msg; }} />
 {:else}
