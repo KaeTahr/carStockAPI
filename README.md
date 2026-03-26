@@ -10,7 +10,7 @@ A car stock management system for dealers, built with C# (FastEndpoints) and Sve
 - FastEndpoints
 - Dapper (raw SQL queries)
 - SQLite
-- JWT Authentication (FastEndpoint.Security)
+- JWT Authentication (FastEndpoints.Security)
 - BCrypt password hashing
 
 ### Frontend
@@ -46,7 +46,7 @@ npm install
 npm run dev
 ```
 
-The frontent will start at `http://localhost:5173`
+The frontend will start at `http://localhost:5173`
 
 ---
 
@@ -63,6 +63,8 @@ Each account has 5 cars pre-loaded. Log in as both to verify dealer isolation.
 Each dealer can only see and manage their own inventory.
 
 ---
+
+## API Endpoints
 
 All car endpoints require a Bearer token obtained from `/auth/login`.
 
@@ -117,6 +119,6 @@ Passwords are hashed with BCrypt before storage. Plain text passwords are never 
 ## Notes & Design Decisions
 
 - **Update endpoint is scoped to stock level only** as per the requirements. A full car update endpoint could easily be added if needed.
-- **`GET /cars/{id}`** is implemented on the backend as a REST practice, though the frontend uses the list endpoint for the dashboard view.
+- **`GET /cars/{id}`** is implemented on the backend as good REST practice, though the frontend uses the list endpoint for the dashboard view.
 - **Pagination** was considered but not implemented as it was not in the requirements, but could be added to `GET /cars` using `LIMIT` and `OFFSET` in the SQL query.
-- **Swagger UI** is available at `https://localhost:5150/swagger` for testing the API directly.
+- **Swagger UI** is available at `http://localhost:5150/swagger` for testing the API directly.
