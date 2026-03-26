@@ -38,7 +38,7 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
         using var connection = _factory.CreateConnection();
 
         var dealer = await connection.QueryFirstOrDefaultAsync<DealerRecord>(
-            "SELECT Id, Username, PasswordHash FROM Dealers WHERE Username = @Username",
+            "SELECT Id, Name, Username, PasswordHash FROM Dealers WHERE Username = @Username",
             new { req.Username });
 
         if (dealer == null || !BCrypt.Net.BCrypt.Verify(req.Password, dealer.PasswordHash))
@@ -56,6 +56,6 @@ public class LoginEndpoint : Endpoint<LoginRequest, LoginResponse>
                 o.User.Claims.Add(("username", dealer.Username));
             });
 
-        await Send.OkAsync(new LoginResponse { Token = token }, ct);
+        await Send.OkAsync(new LoginResponse { Token = token, Name = dealer.Name }, ct);
     }
 }
