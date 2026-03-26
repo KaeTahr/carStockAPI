@@ -4,7 +4,8 @@ A car stock management system for dealers, built with C# (FastEndpoints) and Sve
 
 ## Tech Stack
 
-**Backend**
+### Backend
+
 - .NET 10 / C#
 - FastEndpoints
 - Dapper (raw SQL queries)
@@ -12,7 +13,8 @@ A car stock management system for dealers, built with C# (FastEndpoints) and Sve
 - JWT Authentication (FastEndpoint.Security)
 - BCrypt password hashing
 
-**Frontend**
+### Frontend
+
 - Svelte 5
 - Vite
 - TailwindCSS v4
