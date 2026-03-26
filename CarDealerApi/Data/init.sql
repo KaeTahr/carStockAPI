@@ -1,5 +1,8 @@
 -- For testing only
 -- Delete database before creating new one
+-- DROP TABLE IF EXISTS Cars;
+-- DROP TABLE IF EXISTS Dealers;
+
 
 -- Tables
 CREATE TABLE IF NOT EXISTS Dealers (
