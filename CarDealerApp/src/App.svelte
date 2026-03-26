@@ -13,5 +13,6 @@
 {:else if currentPage === 'register'}
   <Register onNavigate={(page, msg = '') => { currentPage = page; successMessage = msg; }} />
 {:else}
-  <Login {successMessage} onNavigate={(page) => currentPage = page} />
+  <Login {successMessage}
+  onNavigate={(page) => {successMessage = ''; currentPage = page}} />
 {/if}
