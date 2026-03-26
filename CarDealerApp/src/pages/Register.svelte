@@ -3,6 +3,7 @@
   import AuthLayout from '../components/AuthLayout.svelte';
 
   export let onNavigate;
+  
 
   let name = '';
   let username = '';
@@ -28,7 +29,7 @@
         }
         return;
       }
-      success = 'Account created! You can now sign in.';
+      onNavigate('login', 'Account created! You can now sign in.');
     } catch (e) {
       error = e.message;
     } finally {
@@ -44,12 +45,6 @@
   {#if error}
     <div class="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-lg text-sm mb-4">
       {error}
-    </div>
-  {/if}
-
-  {#if success}
-    <div class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-lg text-sm mb-4">
-      {success}
     </div>
   {/if}
 

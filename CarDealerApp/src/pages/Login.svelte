@@ -4,6 +4,7 @@
   import AuthLayout from '../components/AuthLayout.svelte';
 
   export let onNavigate;
+  export let successMessage = '';
 
   let username = '';
   let password = '';
@@ -35,6 +36,12 @@
 <AuthLayout>
   <h1 class="font-display font-bold text-3xl text-text tracking-tight mb-1">Welcome back</h1>
   <p class="text-muted text-sm mb-7">Sign in to manage your inventory</p>
+
+  {#if successMessage}
+    <div class="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-lg text-sm mb-4">
+      {successMessage}
+    </div>
+  {/if}
 
   {#if error}
     <div class="bg-red-500/10 border border-red-500/30 text-red-300 px-4 py-3 rounded-lg text-sm mb-4">

@@ -164,7 +164,7 @@
   </div>
 
   <!-- Search -->
-  <div class="flex gap-3 mb-6">
+  <form onsubmit={(e) => { e.preventDefault(); handleSearch(); }} class="flex gap-3 mb-6">
     <input
       type="text"
       bind:value={searchMake}
@@ -178,19 +178,20 @@
       class="bg-surface2 border border-border rounded-lg px-3.5 py-2 text-text text-sm outline-none focus:border-accent transition-colors placeholder:text-dim flex-1"
     />
     <button
-      onclick={handleSearch}
+      type="submit"
       disabled={searching}
       class="bg-surface2 border border-border hover:border-accent text-text text-sm px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
     >
       {searching ? '...' : 'Search'}
     </button>
     <button
-      onclick={loadCars}
+      type="button"
+      onclick={() => { searchMake = ''; searchModel = ''; loadCars(); }}
       class="text-muted hover:text-text text-sm transition-colors bg-transparent border-none cursor-pointer"
     >
       Clear
     </button>
-  </div>
+</form>
 
   <!-- Error -->
   {#if error}
