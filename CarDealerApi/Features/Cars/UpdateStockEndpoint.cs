@@ -1,7 +1,7 @@
 using Dapper;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Data;
-using Extensions;
 
 namespace Features.Cars;
 
@@ -25,7 +25,7 @@ public class UpdateStockEndpoint : Endpoint<UpdateStockRequest, CarResponse>
     public override async Task HandleAsync(UpdateStockRequest req, CancellationToken ct)
     {
         var id = Route<int>("id");
-        var dealerId = HttpContext.GetDealerId();
+        var dealerId = int.Parse(User.ClaimValue("dealerId")!);
         using var connection = _factory.CreateConnection();
         var sql = "UPDATE Cars SET Stock = @Stock WHERE Id = @Id AND DealerId = @DealerId;";
 

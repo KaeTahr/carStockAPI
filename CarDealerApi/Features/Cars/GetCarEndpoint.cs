@@ -1,7 +1,7 @@
 using Dapper;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Data;
-using Extensions;
 
 namespace Features.Cars;
 
@@ -23,7 +23,7 @@ public class GetCarEndpoint : EndpointWithoutRequest<CarResponse>
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var dealerId = HttpContext.GetDealerId();
+        var dealerId = int.Parse(User.ClaimValue("dealerId")!);
         var id = Route<int>("id");
         using var connection = _factory.CreateConnection();
         var sql = "SELECT * FROM Cars WHERE Id = @Id AND DealerId = @DealerId";

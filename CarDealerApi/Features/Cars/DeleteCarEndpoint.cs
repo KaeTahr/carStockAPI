@@ -1,7 +1,7 @@
 using Dapper;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Data;
-using Extensions;
 
 namespace Features.Cars;
 
@@ -24,7 +24,7 @@ public class DeleteCarEndpoint : EndpointWithoutRequest
     public override async Task HandleAsync(CancellationToken ct)
     {
         var id = Route<int>("id");
-        var dealerId = HttpContext.GetDealerId();
+        var dealerId = int.Parse(User.ClaimValue("dealerId")!);
         using var connection = _factory.CreateConnection();
 
         var sql = "DELETE FROM Cars WHERE Id = @Id AND DealerId = @DealerId";

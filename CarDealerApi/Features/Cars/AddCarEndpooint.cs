@@ -1,7 +1,7 @@
 using Dapper;
 using FastEndpoints;
+using FastEndpoints.Security;
 using Data;
-using Extensions;
 
 
 namespace Features.Cars;
@@ -25,7 +25,7 @@ public class AddCarEndpoint : Endpoint<AddCarRequest, CarResponse>
     public override async Task HandleAsync(AddCarRequest req, CancellationToken ct)
     {
         using var connection = _factory.CreateConnection();
-        var dealerId = HttpContext.GetDealerId();
+        var dealerId = int.Parse(User.ClaimValue("dealerId")!);
 
         var sql = @"INSERT INTO Cars (Make, Model, Year, Price, Stock, DealerId) 
                     VALUES (@Make, @Model, @Year, @Price, @Stock, @DealerId);
